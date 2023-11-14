@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Emprestimos</title>
+</head>
+<body>
+    <!--Permite exibição de mensagem na tela-->
+    <div class="mensagem">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    <div>
+        <h3>Lista de Empréstimos</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID do Empréstimo</th>
+                <th>Matrícula</th>
+                <th>Nome</th>
+                <th>Título do Livro</th>
+                <th>Data do Empréstimo</th>
+                <th>Prazo da Devolução</th>
+                <th>Data da Devolução</th>
+                <th>Multa</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emprestimo in emprestimos %}
+                <tr>
+                    <td>{{ emprestimo.id }}</td>
+                    <td>{{ emprestimo.usuario.matricula }}</td>
+                    <td>{{ emprestimo.usuario.nome }}</td>
+                    <td>{{ emprestimo.livro.titulo }}</td>
+                    <td>{{ emprestimo.data_emprestimo.strftime('%d-%m-%Y') }}</td>
+                    <td>{{ emprestimo.prazo_devolucao.strftime('%d-%m-%Y') }}</td> 
+                    <td>
+                        {% if emprestimo.data_devolucao %}
+                            {{ emprestimo.data_devolucao.strftime('%Y-%m-%d') }}
+                            
+                        {% else %}
+                            <!-- Espaço em branco -->
+                        {% endif %}
+                    </td>
+                    <td>{{ emprestimo.multa }}</td>
+                    <td>
+                        {% if emprestimo.finalizado %}
+                            Finalizado
+                        {% else %}
+                            Em Andamento
+                        {% endif %}
+                    </td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="/adm">Voltar para a página inicial</a>
+    </div>
+</body>
+</html>

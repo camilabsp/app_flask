@@ -150,6 +150,12 @@ def emprestimo():
 
     return render_template('emprestimo.html', usuarios=Usuario.query.all(), livros=Livro.query.all())
 
+#Exibe lista de empréstimos
+@app.route('/adm/emprestimos', methods=['GET'])
+def lista_emprestimos():
+    emprestimos = Emprestimo.query.all()
+    return render_template('lista_emprestimos.html', emprestimos=emprestimos)
+
     
 if __name__ == '__main__':
     app.run(debug=True)
