@@ -113,6 +113,43 @@ def cadastrar_livro():
             return redirect('/adm/livros/cadastrar')
     return render_template('cadastrar_livro.html')
 
+#efetuar empréstimo
+@app.route('/adm/emprestimo', methods=['GET', 'POST'])
+def emprestimo():
+    if request.method == 'POST':
+        usuario_id = request.form.get('usuario_id')
+        livro_id = request.form.get('livro_id')
+
+        usuario = Usuario.query.get(usuario_id)
+        livro = Livro.query.get(livro_id)
+        
+        # Verifica se o usuário existe, se o usuário tem menos de 3 empréstimos não finalizados,
+        # se o livro existe e se o livro está disponível.
+        # Se todas as condições forem atendidas, prossegue com o empréstimo.
+        
+        if usuario and len([e for e in usuario.emprestimos if not e.finalizado]) < 3 and livro and livro.disponivel:
+            
+            # Cria um novo objeto de Empréstimo no banco de dados associando o usuário e o livro.
+            empréstimo = Emprestimo(usuario=usuario, livro=livro)
+            db.session.add(empréstimo)
+            
+            # Marca o livro como indisponível, já que ele está emprestado.
+            livro.disponivel = False
+            
+            # Confirma as alterações no banco de dados
+            db.session.commit()
+            flash('Livro emprestado com sucesso!')
+            
+        # Se o usuário já tem 3 empréstimos, exibe uma mensagem informando que não é possível fazer mais empréstimos.
+        elif len([e for e in usuario.emprestimos if not e.finalizado]) >= 3:
+            flash('Você atingiu o limite máximo de empréstimos.')
+        
+        # Se nenhuma das condições anteriores for atendida.  
+        else:
+            flash('Não foi possível realizar o empréstimo.')
+
+    return render_template('emprestimo.html', usuarios=Usuario.query.all(), livros=Livro.query.all())
+
     
 if __name__ == '__main__':
     app.run(debug=True)
