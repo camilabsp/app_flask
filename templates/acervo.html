@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acervo</title>
+</head>
+<body>
+    <div>
+        <h3>Acervo</h3>
+    <ul>
+        {% for livro in livros %}
+            <li>
+                <p>Título: {{ livro.titulo }}</p>
+                <p>Autor: {{ livro.autor }}</p>
+                <p>ISBN: {{ livro.isbn }}</p>
+                <p>Editora: {{ livro.editora }}</p>
+                <p>Ano de Publicação: {{ livro.ano }}</p>
+                <a href="/edit/{{ livro.id }}" class="btn btn-primary">Editar</a>
+                <a href="/delete/{{ livro.id }}" class="btn btn-danger">Excluir</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/adm">Voltar ao Início</a>
+    </div>
+</body>
+</html>

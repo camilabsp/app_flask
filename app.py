@@ -127,6 +127,12 @@ def lista_usuarios():
     usuarios = Usuario.query.all()  
     return render_template('lista_usuarios.html', usuarios=usuarios)
 
+#Consultar o acervo 
+@app.route('/adm/acervo')
+def acervo():
+    livros = Livro.query.all()
+    return render_template('acervo.html', livros = livros)
+
 #efetuar empréstimo
 @app.route('/adm/emprestimo', methods=['GET', 'POST'])
 def emprestimo():
