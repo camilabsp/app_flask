@@ -95,6 +95,24 @@ def cadastrar_usuario():
             flash('Usuário Cadastrado com Sucesso!')
             return redirect('/adm/usuarios/cadastrar')
     return render_template('cadastrar_usuario.html')
+
+#cadastrar livro
+@app.route('/adm/livros/cadastrar', methods=['GET','POST'])
+def cadastrar_livro():
+    if request.method == 'POST':
+        isbn = request.form['isbn']
+        titulo = request.form['titulo']
+        autor = request.form['autor']
+        editora = request.form['editora']
+        ano = request.form['ano']
+        if isbn and titulo and autor and editora and ano:
+            novo_usuario = Livro(isbn=isbn, titulo = titulo, autor = autor, editora = editora, ano = ano)
+            db.session.add(novo_usuario)
+            db.session.commit()
+            flash(f'Livro "{titulo}" Cadastrado com Sucesso!')
+            return redirect('/adm/livros/cadastrar')
+    return render_template('cadastrar_livro.html')
+
     
 if __name__ == '__main__':
     app.run(debug=True)
