@@ -59,6 +59,9 @@ def login():
             flash(f'Olá {usuario.nome}!')
             return redirect('/usuario')
         
+        elif matricula == 'adm' and senha == '000':
+            return redirect('/adm')
+        
         else:
             flash('Usuário Inválido!')
             return redirect('/')
@@ -69,6 +72,11 @@ def login():
 @app.route('/usuario')
 def pagina_usuario():
     return render_template('usuario.html')
+
+#Página Inicial (Administrador)
+@app.route('/adm')
+def pagina_administrador():
+    return render_template('adm.html')
     
 if __name__ == '__main__':
     app.run(debug=True)
