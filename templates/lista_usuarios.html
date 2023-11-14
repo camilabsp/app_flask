@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuários</title>
+</head>
+<body>
+    <div>
+    <h3>Lista de Usuários</h3>
+    <ul>
+        {% for usuario in usuarios %}
+            <li>
+                <p>Nome: {{ usuario.nome }}</p>
+                <p>Endereço: {{ usuario.endereco }}</p>
+                <p>E-mail: {{ usuario.email }}</p>
+                <p>Telefone: {{ usuario.telefone }}</p>
+                <p>Matrícula: {{ usuario.matricula }}</p>
+                <a href="/edit/{{ usuario.id }}" class="btn btn-primary">Editar</a>
+                <a href="/delete/{{ usuario.id }}" class="btn btn-danger">Excluir</a>
+            </li>
+
+        {% endfor %}
+    </ul>
+    <a href="/adm">Voltar ao Início</a>
+    </div>
+</body>
+</html>
