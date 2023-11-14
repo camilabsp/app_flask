@@ -77,6 +77,24 @@ def pagina_usuario():
 @app.route('/adm')
 def pagina_administrador():
     return render_template('adm.html')
+
+#cadastrar usuario 
+@app.route('/adm/usuarios/cadastrar', methods=['GET','POST'])
+def cadastrar_usuario():
+    if request.method == 'POST':
+        nome = request.form['nome']
+        endereco = request.form['endereco']
+        email = request.form['email']
+        telefone = request.form['telefone']
+        matricula = request.form['matricula']
+        senha = request.form['senha']
+        if nome and endereco and email and telefone and matricula and senha:
+            novo_usuario = Usuario(nome=nome, endereco=endereco, email=email, telefone=telefone, matricula=matricula, senha=senha)
+            db.session.add(novo_usuario)
+            db.session.commit()
+            flash('Usuário Cadastrado com Sucesso!')
+            return redirect('/adm/usuarios/cadastrar')
+    return render_template('cadastrar_usuario.html')
     
 if __name__ == '__main__':
     app.run(debug=True)

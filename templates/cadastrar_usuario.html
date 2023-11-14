@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuários</title>
+</head>
+<body>
+
+   
+        <!--Permite exibição de mensagem na tela-->
+    <div class="mensagem">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    
+
+    <div>
+        <h3>Cadastro de Usuários</h3>
+        <form method="POST" action="/adm/usuarios/cadastrar"><!--inserir rota(url)-->
+            <label for="nome">Nome:</label>
+            <input type="text" name="nome" id="nome" required>
+        
+            <label for="endereco">Endereço:</label>
+            <input type="text" name="endereco" id="endereco" required>
+        
+            <label for="email">E-mail:</label>
+            <input type="email" name="email" id="email" required>
+        
+            <label for="telefone">Telefone:</label>
+            <input type="tel" name="telefone" id="telefone" required>
+        
+            <label for="matricula">Matrícula:</label>
+            <input type="text" name="matricula" id="matricula" required>
+        
+            <label for="senha">Senha:</label>
+            <input type="password" name="senha" id="senha" required>
+        
+            <button type="submit">Cadastrar</button>
+        </form>
+        <a href="/adm">Voltar para a página inicial</a>
+    </div>
+</body>
+</html>

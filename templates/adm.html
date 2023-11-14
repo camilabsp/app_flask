@@ -6,6 +6,18 @@
     <title>Administrador</title>
 </head>
 <body>
+
+    <!--Permite exibição de mensagem na tela-->
+    <div class="mensagem">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    
     <div>
         <h3>Página do Administrador</h3>
         <ul>
