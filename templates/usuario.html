@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+     <!--Exibe mensagem na tela (flash)-->
+     <div class="mensagem">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <!--Menu do Usuário-->
+    <div>
+        <h3>Página do Usuário</h3>
+        <ul>
+            <li><a href="/usuario">Home</a></li>
+            <li><a href="/usuario/acervo">Consultar Acervo</a></li>
+            <li><a href="/usuario/historico">Histórico</a></li>
+        </ul>
+    </div>
+</body>
+</html>

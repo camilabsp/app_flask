@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <!--Exibe mensagem na tela (flash)-->
+    <div class="mensagem">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!--Formulário de Login-->
+    <div class="form-login">
+        <form action="/login" method="post">
+            <p><label for="matricula">Matricula</label></p>
+            <p><input type="text" name="matricula" id="matricula" required></p>
+            <p><label for="senha">Senha</label></p>
+            <p><input type="text" name="senha" id="senha" required></p>
+            <button type="submit" class="btn-submit">Entrar</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -39,12 +39,36 @@ class Emprestimo(db.Model):
 
     usuario = db.relationship('Usuario', backref=db.backref('emprestimos', lazy=True))
     livro = db.relationship('Livro', backref=db.backref('emprestimos', lazy=True))
-    
-
+  
+#ROTAS  
+#página inicial
 @app.route('/')
 def index():
-    return 'Página Inicial'
+    return render_template('login.html')
 
+#página de login
+@app.route('/login', methods=["GET","POST"])
+def login():
+    if request.method == 'POST':
+        matricula = request.form['matricula']
+        senha = request.form['senha']
+        
+        usuario = Usuario.query.filter_by(matricula = matricula, senha = senha).first()
+        
+        if usuario:
+            flash(f'Olá {usuario.nome}!')
+            return redirect('/usuario')
+        
+        else:
+            flash('Usuário Inválido!')
+            return redirect('/')
+        
+    return render_template('login.html')
+
+#Página Inicial (Usuário)
+@app.route('/usuario')
+def pagina_usuario():
+    return render_template('usuario.html')
     
 if __name__ == '__main__':
     app.run(debug=True)
