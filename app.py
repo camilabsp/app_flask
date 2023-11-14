@@ -39,7 +39,15 @@ class Emprestimo(db.Model):
 
     usuario = db.relationship('Usuario', backref=db.backref('emprestimos', lazy=True))
     livro = db.relationship('Livro', backref=db.backref('emprestimos', lazy=True))
-  
+
+#Função para calcular multa
+def calcular_multa(prazo_devolucao, data_atual):
+    if data_atual > prazo_devolucao:
+        dias = (data_atual - prazo_devolucao).days
+        taxa = dias * 1  #(taxa R$1,00 real por dia de atraso)
+        return taxa
+    return 0
+ 
 #ROTAS  
 #página inicial
 @app.route('/')
@@ -113,6 +121,12 @@ def cadastrar_livro():
             return redirect('/adm/livros/cadastrar')
     return render_template('cadastrar_livro.html')
 
+# Lista todos os usuários
+@app.route('/adm/usuarios')
+def lista_usuarios():
+    usuarios = Usuario.query.all()  
+    return render_template('lista_usuarios.html', usuarios=usuarios)
+
 #efetuar empréstimo
 @app.route('/adm/emprestimo', methods=['GET', 'POST'])
 def emprestimo():
@@ -156,6 +170,56 @@ def lista_emprestimos():
     emprestimos = Emprestimo.query.all()
     return render_template('lista_emprestimos.html', emprestimos=emprestimos)
 
-    
+# Rota para a página de devolução
+@app.route('/adm/devolucao', methods=['GET', 'POST'])
+def devolucao():
+    if request.method == 'POST':
+        emprestimo_id = request.form.get('emprestimo_id')
+        data_devolucao_str = request.form.get('data_devolucao')
+
+        if not emprestimo_id:
+            flash('Selecione um empréstimo para devolver.')
+        elif not data_devolucao_str:
+            flash('Informe a data de devolução.')
+        else:
+            try:
+                emprestimo = Emprestimo.query.get(int(emprestimo_id))
+                data_devolucao = datetime.strptime(data_devolucao_str, '%Y-%m-%d')
+
+                if emprestimo:
+                    if data_devolucao > emprestimo.prazo_devolucao:
+                        # Calcule a multa por atraso
+                        taxa = calcular_multa(emprestimo.prazo_devolucao, data_devolucao)
+                        emprestimo.multa = taxa
+                    else:
+                        taxa = 0
+                        
+                    emprestimo.data_devolucao = data_devolucao
+
+                    # Marca o livro como disponível novamente 
+                    
+                    livro = emprestimo.livro
+                    livro.disponivel = True
+                    
+                    # Marca o empréstimo como finalizado apenas quando o livro for devolvido
+                    if livro.disponivel:
+                        emprestimo.finalizado = True
+                    
+
+                    db.session.commit()
+
+                    if taxa > 0:
+                        flash(f'Livro devolvido com sucesso! Multa por atraso: R$ {taxa:.2f}')
+                    else:
+                        flash('Livro devolvido com sucesso!')
+                else:
+                    flash('Empréstimo não encontrado. Verifique as informações.')
+            except ValueError:
+                flash('Data de devolução inválida.')
+
+    emprestimos = Emprestimo.query.filter_by(finalizado=None).all()
+    return render_template('devolucao.html', emprestimos=emprestimos)
+
+
 if __name__ == '__main__':
     app.run(debug=True)

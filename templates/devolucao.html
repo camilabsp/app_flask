@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devolução de Empréstimo</title>
+</head>
+<body>
+    <div>
+        <h3>Devolução de Livros</h3>
+        <form method="post">
+            <label for="emprestimo_id">Selecione o empréstimo a ser devolvido:</label>
+            <select name="emprestimo_id">
+                <option value="">Selecione um empréstimo</option>
+                {% for emprestimo in emprestimos %}
+                    <option value="{{ emprestimo.id }}">
+                        Empréstimo ID: {{ emprestimo.id }} - Livro: {{ emprestimo.livro.titulo }} - Usuário: {{ emprestimo.usuario.nome }}
+                    </option>
+                {% endfor %}
+            </select>
+            <br>
+
+            <label for="data_devolucao">Data de Devolução:</label>
+            <input type="date" name="data_devolucao">
+            <br>
+            <button type="submit">Devolver Livro</button>
+        </form>
+    </div>
+    <!--Exibe mensagem na tela-->
+    <div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>
