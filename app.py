@@ -48,15 +48,20 @@ def calcular_multa(prazo_devolucao, data_atual):
         return taxa
     return 0
  
+adm_logado = False
+ 
 #ROTAS  
 #página inicial
 @app.route('/')
 def index():
+    global adm_logado
+    adm_logado = False
     return render_template('login.html')
 
 #página de login
 @app.route('/login', methods=["GET","POST"])
 def login():
+    global adm_logado
     if request.method == 'POST':
         matricula = request.form['matricula']
         senha = request.form['senha']
@@ -67,7 +72,8 @@ def login():
             flash(f'Olá {usuario.nome}!')
             return redirect('/usuario')
         
-        elif matricula == 'adm' and senha == '000':
+        elif matricula == 'adm' and senha == '000': 
+            adm_logado = True
             return redirect('/adm')
         
         else:
@@ -84,12 +90,20 @@ def pagina_usuario():
 #Página Inicial (Administrador)
 @app.route('/adm')
 def pagina_administrador():
-    return render_template('adm.html')
+    if adm_logado == True:
+        return render_template('adm.html')
+    if adm_logado == False:
+        flash('Você não tem permissão para acessar essa página')
+        return redirect('/')
 
 #cadastrar usuario 
 @app.route('/adm/usuarios/cadastrar', methods=['GET','POST'])
 def cadastrar_usuario():
-    if request.method == 'POST':
+    global adm_logado
+    if adm_logado == False:
+        flash('Você não tem permissão para acessar essa página')
+        return redirect('/')
+    elif request.method == 'POST':
         nome = request.form['nome']
         endereco = request.form['endereco']
         email = request.form['email']
@@ -107,7 +121,11 @@ def cadastrar_usuario():
 #cadastrar livro
 @app.route('/adm/livros/cadastrar', methods=['GET','POST'])
 def cadastrar_livro():
-    if request.method == 'POST':
+    global adm_logado
+    if adm_logado == False:
+        flash('Você não tem permissão para acessar essa página')
+        return redirect('/')
+    elif request.method == 'POST':
         isbn = request.form['isbn']
         titulo = request.form['titulo']
         autor = request.form['autor']
@@ -124,19 +142,33 @@ def cadastrar_livro():
 # Lista todos os usuários
 @app.route('/adm/usuarios')
 def lista_usuarios():
-    usuarios = Usuario.query.all()  
-    return render_template('lista_usuarios.html', usuarios=usuarios)
+    global adm_logado
+    if adm_logado == True:
+        usuarios = Usuario.query.all()  
+        return render_template('lista_usuarios.html', usuarios=usuarios)
+    else:
+        flash('Você não tem acesso a essa página')
+        return redirect('/')
 
 #Consultar o acervo 
 @app.route('/adm/acervo')
 def acervo():
-    livros = Livro.query.all()
-    return render_template('acervo.html', livros = livros)
+    global adm_logado
+    if adm_logado == True:
+        livros = Livro.query.all()
+        return render_template('acervo.html', livros = livros)
+    else:
+        flash('Você não tem permissão para acessar essa página')
+        return redirect('/')
 
 #efetuar empréstimo
 @app.route('/adm/emprestimo', methods=['GET', 'POST'])
 def emprestimo():
-    if request.method == 'POST':
+    global adm_logado
+    if adm_logado == False:
+        flash('Você não tem permissão para acessar essa página')
+        return redirect('/')
+    elif request.method == 'POST':
         usuario_id = request.form.get('usuario_id')
         livro_id = request.form.get('livro_id')
 
@@ -173,13 +205,22 @@ def emprestimo():
 #Exibe lista de empréstimos
 @app.route('/adm/emprestimos', methods=['GET'])
 def lista_emprestimos():
-    emprestimos = Emprestimo.query.all()
-    return render_template('lista_emprestimos.html', emprestimos=emprestimos)
+    global adm_logado
+    if adm_logado == True:
+        emprestimos = Emprestimo.query.all()
+        return render_template('lista_emprestimos.html', emprestimos=emprestimos)
+    else:
+        flash('Você não tem permissão para acessar essa página')
+        return redirect('/')
 
 # Rota para a página de devolução
 @app.route('/adm/devolucao', methods=['GET', 'POST'])
 def devolucao():
-    if request.method == 'POST':
+    global adm_logado
+    if adm_logado == False:
+        flash('Você não tem permissão para acessar essa página')
+        return redirect('/')
+    elif request.method == 'POST':
         emprestimo_id = request.form.get('emprestimo_id')
         data_devolucao_str = request.form.get('data_devolucao')
 
