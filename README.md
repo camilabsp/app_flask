@@ -6,7 +6,16 @@ Este é um sistema simples de biblioteca desenvolvido em Flask.
 
 Certifique-se de ter o pip instalado em seu ambiente. 
 
-Execute o aplicativo usando o seguinte comando: flask run
+#### Ambiente Flask
+- *python -m venv .venv*
+
+- *venv\Scripts\activate*
+
+- *pip install flask*
+
+- *pip install flask-SQLAlchemy*
+
+Execute o aplicativo usando o seguinte comando: *flask run*
 
 ### Funcionalidades
 
