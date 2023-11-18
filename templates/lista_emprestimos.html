@@ -36,8 +36,8 @@
             {% for emprestimo in emprestimos %}
                 <tr>
                     <td>{{ emprestimo.id }}</td>
-                    <td>{{ emprestimo.usuario.matricula }}</td>
-                    <td>{{ emprestimo.usuario.nome }}</td>
+                    <td>{{ emprestimo.usuario.matricula|upper }}</td>
+                    <td>{{ emprestimo.usuario.nome|upper }}</td>
                     <td>{{ emprestimo.livro.titulo }}</td>
                     <td>{{ emprestimo.data_emprestimo.strftime('%d-%m-%Y') }}</td>
                     <td>{{ emprestimo.prazo_devolucao.strftime('%d-%m-%Y') }}</td> 
