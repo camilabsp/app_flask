@@ -1,46 +1,78 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Empréstimo</title>
+    <title>Empréstimo de Livros</title>
+    <style>
+        .user-options {
+            display: none;
+        }
+
+        .user-options select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+    </style>
 </head>
 <body>
-    <!--Permite exibição de mensagem na tela-->
-    <div class="mensagem">
-        {% with messages = get_flashed_messages() %}
+    <h1>Empréstimo de Livros</h1>
+
+    {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
                 {{ message }}
             {% endfor %}
         {% endif %}
-        {% endwith %}
-    </div>
-    <div>
-        <form method="POST" action="/adm/emprestimo"><!--rota-->
-        
-            <label for="usuario_id">Selecione o Usuário:</label>
-            <select name="usuario_id" id="usuario_id" required>
-                <option value="" disabled selected>Selecione um usuário</option>
-                {% for usuario in usuarios %}
-                    <option value="{{ usuario.id }}">Matrícula: {{ usuario.matricula }} - {{usuario.nome}}</option>
-                {% endfor %}
-            </select>
-    
-            <label for="livro_id">Selecione o Livro Disponível:</label>
-            <select name="livro_id" id="livro_id" required>
-                <option value="" disabled selected>Selecione um livro</option>
-                {% for livro in livros %}
-                    {% if livro.disponivel %}
-                        <option value="{{ livro.id }}"> ISBN: {{ livro.isbn }} - Título: {{ livro.titulo }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-    
-            <button type="submit">Empréstimo</button>
-        </form>
-        <a href="/adm/emprestimos">Ver Lista de Empréstimos</a>
-        <a href="/adm">Voltar para a página inicial</a>
-    </div>
+    {% endwith %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Editora</th>
+                <th>Ano</th>
+                <th>Opção de Empréstimo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for livro in livros %}
+                <tr>
+                    <td>{{ livro.titulo }}</td>
+                    <td>{{ livro.autor }}</td>
+                    <td>{{ livro.editora }}</td>
+                    <td>{{ livro.ano }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('emprestimo') }}">
+                            <input type="hidden" name="livro_id" value="{{ livro.id }}">
+                            <button type="button" onclick="showUserOptions('{{ livro.id }}')">Realizar Empréstimo</button>
+                            <div class="user-options" id="userOptions{{ livro.id }}">
+                                <label for="usuario_id">Selecione o Usuário:</label>
+                                <select name="usuario_id" id="usuario_id">
+                                    {% for usuario in usuarios %}
+                                        <option value="{{ usuario.id }}">{{ usuario.matricula }} - {{ usuario.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit">Confirmar Empréstimo</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        function showUserOptions(livroId) {
+            var userOptionsDiv = document.getElementById('userOptions' + livroId);
+            userOptionsDiv.style.display = 'block';
+        }
+    </script>
 </body>
 </html>

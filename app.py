@@ -165,42 +165,42 @@ def acervo():
 @app.route('/adm/emprestimo', methods=['GET', 'POST'])
 def emprestimo():
     global adm_logado
-    if adm_logado == False:
+    if not adm_logado:
         flash('Você não tem permissão para acessar essa página')
         return redirect('/')
     elif request.method == 'POST':
-        usuario_id = request.form.get('usuario_id')
         livro_id = request.form.get('livro_id')
+        usuario_id = request.form.get('usuario_id')
 
-        usuario = Usuario.query.get(usuario_id)
         livro = Livro.query.get(livro_id)
-        
-        # Verifica se o usuário existe, se o usuário tem menos de 3 empréstimos não finalizados,
-        # se o livro existe e se o livro está disponível.
-        # Se todas as condições forem atendidas, prossegue com o empréstimo.
-        
-        if usuario and len([e for e in usuario.emprestimos if not e.finalizado]) < 3 and livro and livro.disponivel:
-            
-            # Cria um novo objeto de Empréstimo no banco de dados associando o usuário e o livro.
-            empréstimo = Emprestimo(usuario=usuario, livro=livro)
-            db.session.add(empréstimo)
-            
-            # Marca o livro como indisponível, já que ele está emprestado.
-            livro.disponivel = False
-            
-            # Confirma as alterações no banco de dados
-            db.session.commit()
-            flash('Livro emprestado com sucesso!')
-            
-        # Se o usuário já tem 3 empréstimos, exibe uma mensagem informando que não é possível fazer mais empréstimos.
-        elif len([e for e in usuario.emprestimos if not e.finalizado]) >= 3:
-            flash('Você atingiu o limite máximo de empréstimos.')
-        
-        # Se nenhuma das condições anteriores for atendida.  
-        else:
-            flash('Não foi possível realizar o empréstimo.')
+        usuario = Usuario.query.get(usuario_id)
 
-    return render_template('emprestimo.html', usuarios=Usuario.query.all(), livros=Livro.query.all())
+        if livro and usuario:
+            if livro.disponivel:
+                if len([e for e in usuario.emprestimos if not e.finalizado]) < 3:
+                    # Create a new loan record in the database
+                    emprestimo = Emprestimo(usuario=usuario, livro=livro)
+                    db.session.add(emprestimo)
+
+                    # Mark the book as unavailable
+                    livro.disponivel = False
+
+                    # Commit changes to the database
+                    db.session.commit()
+
+                    flash('Empréstimo realizado com sucesso!')
+                else:
+                    flash('Você atingiu o limite máximo de empréstimos.')
+            else:
+                flash('O livro selecionado não está disponível para empréstimo.')
+        else:
+            flash('Não foi possível realizar o empréstimo. Verifique os dados fornecidos.')
+
+    livros = Livro.query.all()
+    usuarios = Usuario.query.all()
+
+    return render_template('emprestimo.html', livros=livros, usuarios=usuarios)
+
 
 #Exibe lista de empréstimos
 @app.route('/adm/emprestimos', methods=['GET'])
