@@ -217,7 +217,7 @@ def lista_emprestimos():
 @app.route('/adm/devolucao', methods=['GET', 'POST'])
 def devolucao():
     global adm_logado
-    if adm_logado == False:
+    if not adm_logado:
         flash('Você não tem permissão para acessar essa página')
         return redirect('/')
     elif request.method == 'POST':
@@ -228,12 +228,15 @@ def devolucao():
             flash('Selecione um empréstimo para devolver.')
         elif not data_devolucao_str:
             flash('Informe a data de devolução.')
+            
         else:
             try:
                 emprestimo = Emprestimo.query.get(int(emprestimo_id))
                 data_devolucao = datetime.strptime(data_devolucao_str, '%Y-%m-%d')
-
-                if emprestimo:
+                #verifica se a data de devolução é anterior a data do emprestimo
+                if data_devolucao < emprestimo.data_emprestimo:
+                    flash('Data de devolução inválida!')
+                elif emprestimo:
                     if data_devolucao > emprestimo.prazo_devolucao:
                         # Calcule a multa por atraso
                         taxa = calcular_multa(emprestimo.prazo_devolucao, data_devolucao)
@@ -266,7 +269,6 @@ def devolucao():
 
     emprestimos = Emprestimo.query.filter_by(finalizado=None).all()
     return render_template('devolucao.html', emprestimos=emprestimos)
-
 
 if __name__ == '__main__':
     app.run(debug=True)

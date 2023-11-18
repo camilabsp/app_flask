@@ -1,42 +1,65 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devolução de Empréstimo</title>
+    <title>Devolução de Livros</title>
 </head>
 <body>
-    <div>
-        <h3>Devolução de Livros</h3>
-        <form method="post">
-            <label for="emprestimo_id">Selecione o empréstimo a ser devolvido:</label>
-            <select name="emprestimo_id">
-                <option value="">Selecione um empréstimo</option>
-                {% for emprestimo in emprestimos %}
-                    <option value="{{ emprestimo.id }}">
-                        Empréstimo ID: {{ emprestimo.id }} - Livro: {{ emprestimo.livro.titulo }} - Usuário: {{ emprestimo.usuario.nome }}
-                    </option>
-                {% endfor %}
-            </select>
-            <br>
 
-            <label for="data_devolucao">Data de Devolução:</label>
-            <input type="date" name="data_devolucao">
-            <br>
-            <button type="submit">Devolver Livro</button>
-        </form>
-    </div>
-    <!--Exibe mensagem na tela-->
-    <div>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-    </div>
+<div class="mensagem">
+    <h2>Devolução de Livros</h2>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+
+    {% if emprestimos %}
+        <table class="tabela">
+            <thead>
+            <tr>
+                <th>ID do Empréstimo</th>
+                <th>Matrícula do Usuário</th>
+                <th>Título do Livro</th>
+                <th>Data Devolução</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for emprestimo in emprestimos %}
+                <tr>
+                    <td>{{ emprestimo.id }}</td>
+                    <td>{{ emprestimo.usuario.matricula }}</td>
+                    <td>{{ emprestimo.livro.titulo }}</td>
+                    <td>
+                        {% if emprestimo.data_devolucao %}
+                            {{ emprestimo.data_devolucao.strftime('%d-%m-%Y') }}
+                        {% else %}
+                            <form method="post" action="{{ url_for('devolucao') }}">
+                                <input type="hidden" name="emprestimo_id" value="{{ emprestimo.id }}">
+                                <div class="data">
+                                    <input type="date" class="form-data" name="data_devolucao" required>
+                                </div>
+                                <td><button type="submit" class="btn-submit">Devolver Livro</button></td>
+                            </form>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if emprestimo.finalizado %}
+                            Livro Devolvido
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhum empréstimo disponível no momento.</p>
+    {% endif %}
+</div>
+
 </body>
 </html>

@@ -43,7 +43,7 @@
                     <td>{{ emprestimo.prazo_devolucao.strftime('%d-%m-%Y') }}</td> 
                     <td>
                         {% if emprestimo.data_devolucao %}
-                            {{ emprestimo.data_devolucao.strftime('%Y-%m-%d') }}
+                            {{ emprestimo.data_devolucao.strftime('%d-%m-%Y') }}
                             
                         {% else %}
                             <!-- Espaço em branco -->
