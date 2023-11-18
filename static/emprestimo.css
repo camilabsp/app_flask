@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+.user-options {
+    display: none;
+}
+
+.user-options select {
+    width: 100%;
+    padding: 2px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
