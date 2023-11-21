@@ -168,6 +168,7 @@ def emprestimo():
     if not adm_logado:
         flash('Você não tem permissão para acessar essa página')
         return redirect('/')
+    
     elif request.method == 'POST':
         livro_id = request.form.get('livro_id')
         usuario_id = request.form.get('usuario_id')
@@ -178,16 +179,10 @@ def emprestimo():
         if livro and usuario:
             if livro.disponivel:
                 if len([e for e in usuario.emprestimos if not e.finalizado]) < 3:
-                    # Create a new loan record in the database
                     emprestimo = Emprestimo(usuario=usuario, livro=livro)
                     db.session.add(emprestimo)
-
-                    # Mark the book as unavailable
                     livro.disponivel = False
-
-                    # Commit changes to the database
                     db.session.commit()
-
                     flash('Empréstimo realizado com sucesso!')
                 else:
                     flash('Você atingiu o limite máximo de empréstimos.')
@@ -200,7 +195,6 @@ def emprestimo():
     usuarios = Usuario.query.all()
 
     return render_template('emprestimo.html', livros=livros, usuarios=usuarios)
-
 
 #Exibe lista de empréstimos
 @app.route('/adm/emprestimos', methods=['GET'])
@@ -220,6 +214,7 @@ def devolucao():
     if not adm_logado:
         flash('Você não tem permissão para acessar essa página')
         return redirect('/')
+    
     elif request.method == 'POST':
         emprestimo_id = request.form.get('emprestimo_id')
         data_devolucao_str = request.form.get('data_devolucao')
