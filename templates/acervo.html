@@ -17,6 +17,7 @@
                 <p>ISBN: {{ livro.isbn }}</p>
                 <p>Editora: {{ livro.editora }}</p>
                 <p>Ano de Publicação: {{ livro.ano }}</p>
+                <p>Qtd. Exemplares: {{ livro.quantidade_exemplares }}</p>
                 <a href="/edit/{{ livro.id }}" class="btn btn-primary">Editar</a>
                 <a href="/delete/{{ livro.id }}" class="btn btn-danger">Excluir</a>
             </li>

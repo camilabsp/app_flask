@@ -26,6 +26,7 @@ class Livro(db.Model):
     editora = db.Column(db.String(200), nullable=False)
     ano = db.Column(db.String(100), nullable=False)
     disponivel = db.Column(db.Boolean, default=True)
+    quantidade_exemplares = db.Column(db.Integer, nullable=False)
     
 class Emprestimo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,9 +42,9 @@ class Emprestimo(db.Model):
     livro = db.relationship('Livro', backref=db.backref('emprestimos', lazy=True))
 
 #Função para calcular multa
-def calcular_multa(prazo_devolucao, data_atual):
-    if data_atual > prazo_devolucao:
-        dias = (data_atual - prazo_devolucao).days
+def calcular_multa(prazo_devolucao, data_devolucao):
+    if data_devolucao > prazo_devolucao:
+        dias = (data_devolucao - prazo_devolucao).days
         taxa = dias * 1  #(taxa R$1,00 real por dia de atraso)
         return taxa
     return 0
@@ -131,9 +132,10 @@ def cadastrar_livro():
         autor = request.form['autor']
         editora = request.form['editora']
         ano = request.form['ano']
-        if isbn and titulo and autor and editora and ano:
-            novo_usuario = Livro(isbn=isbn, titulo = titulo, autor = autor, editora = editora, ano = ano)
-            db.session.add(novo_usuario)
+        quantidade_exemplares = request.form['quantidade_exemplares']
+        if isbn and titulo and autor and editora and ano and quantidade_exemplares:
+            novo_livro = Livro(isbn=isbn, titulo=titulo, autor=autor, editora=editora, ano=ano, quantidade_exemplares=quantidade_exemplares, disponivel=True)
+            db.session.add(novo_livro)
             db.session.commit()
             flash(f'Livro "{titulo}" Cadastrado com Sucesso!')
             return redirect('/adm/livros/cadastrar')
@@ -177,13 +179,16 @@ def emprestimo():
         usuario = Usuario.query.get(usuario_id)
 
         if livro and usuario:
-            if livro.disponivel:
+            if livro.quantidade_exemplares > 0:
                 if len([e for e in usuario.emprestimos if not e.finalizado]) < 3:
+                    livro.quantidade_exemplares -= 1
                     emprestimo = Emprestimo(usuario=usuario, livro=livro)
                     db.session.add(emprestimo)
-                    livro.disponivel = False
                     db.session.commit()
                     flash('Empréstimo realizado com sucesso!')
+                elif livro.quantidade_exemplares == 0:
+                    livro.disponivel = False
+                    flash('Não há exemplares disponíveis para empréstimo.')
                 else:
                     flash('Você atingiu o limite máximo de empréstimos.')
             else:
@@ -244,13 +249,13 @@ def devolucao():
                     # Marca o livro como disponível novamente 
                     
                     livro = emprestimo.livro
+                    livro.quantidade_exemplares += 1
                     livro.disponivel = True
                     
                     # Marca o empréstimo como finalizado apenas quando o livro for devolvido
                     if livro.disponivel:
                         emprestimo.finalizado = True
                     
-
                     db.session.commit()
 
                     if taxa > 0:
