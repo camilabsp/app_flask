@@ -9,7 +9,7 @@ Certifique-se de ter o pip instalado em seu ambiente.
 #### Ambiente Flask
 - *python -m venv .venv*
 
-- *venv\Scripts\activate*
+- *.\.venv\Scripts\activate*
 
 - *pip install flask*
 
