@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-@charset "UTF-8";
-
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
@@ -35,30 +33,16 @@ nav a:hover {
     background-color: #361486;
 }
 
-.mensagem{
-    color: #2b155e;
+form{
     text-align: center;
 }
 
-div {
-    max-width: 800px;
-    height: 350px;
-    margin: 20px auto;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+input{
     border-radius: 8px;
-    overflow-y: scroll;
-}
-
-h3{
-    text-align: center;
-    color: #2b155e;
-}
-
-a{
-    text-decoration: none;
-    color: #2b155e;
+    border-style: solid;
+    border-color: #2b155e;
+    border-width: 1px;
+    padding: 6px;
 }
 
 select{
@@ -70,31 +54,51 @@ select{
     font-size: 15px;
 }
 
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
-}
-
-p {
-    margin: 5px 0;
-}
-
-a {
-    text-decoration: none;
-    padding: 5px 10px;
-    margin-right: 10px;
-    border-radius: 4px;
-    color: #fff;
+button{
+    background-color: #2b155e;
+    border-radius: 10px;
+    color: white;
+    padding: 8px 12px;
+    border: none;
     cursor: pointer;
 }
 
-a:hover {
-    opacity: 0.8;
+.mensagem{
+    color: #2b155e;
+    text-align: center;
+}
+
+div {
+    max-width: 1000px;
+    height: 350px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow-y: scroll;
+}
+
+.exemplar, .isbn, .ano{
+    width: 50px;
+}
+
+.titulo, .autor{
+    width: 200px;
+}
+
+.editora{
+    width: 100px;
+}
+
+h3{
+    text-align: center;
+}
+
+a{
+    text-decoration: none;
+    color: #2b155e;
+    
 }
 
 table {
@@ -103,56 +107,46 @@ table {
     margin-top: 20px;
 }
 
-th, td {
+th {
+    background-color: #f2f2f2;
     border: 1px solid #dddddd;
-    text-align: left;
+    text-align: center;
     padding: 8px;
 }
 
-th {
-    background-color: #f2f2f2;
+td{
+    text-align: center;
 }
 
-button {
+.btn-editar {
     background-color: #2b155e;
     border-radius: 10px;
-    width: 100%;
+    width: 45%;
     color: white;
     padding: 8px 12px;
     border: none;
     cursor: pointer;
 }
 
-input{
-    border-radius: 8px;
-    border-style: solid;
-    border-color: #2b155e;
-    border-width: 1px;
-    padding: 6px;
+.btn-excluir {
+    background-color: #850c0c;
+    border-radius: 10px;
+    width: 45%;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
 }
 
-form{
-    text-align: center;
-}
-
-button:hover {
+.btn-editar:hover {
     background-color: #2b155e;
+}
+
+.btn-excluir:hover {
+    background-color: #850c0c;
 }
 
 label, select, button[type="submit"] {
     margin-top: 5px;
     margin-bottom: 5px;
-}
-
-.user-options {
-    display: none;
-}
-
-.user-options select {
-    width: 100%;
-    padding: 2px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
 }

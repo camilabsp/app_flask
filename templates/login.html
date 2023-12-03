@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/login.css">
     <title>Login</title>
 </head>
 <body>
+    <div class="menu">
+        <ul>
+            <li><a href="/">Página Inicial</a></li>
+            <li><a href="/">Sobre</a></li>
+            <li><a href="/">Contato</a></li>
+        </ul>
+    </div>
+    
     <!--Exibe mensagem na tela (flash)-->
-    <div class="mensagem">
+    <p class="mensagem">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
@@ -15,7 +24,7 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-    </div>
+    </p>
 
     <!--Formulário de Login-->
     <div class="form-login">

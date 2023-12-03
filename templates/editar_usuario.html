@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/editar_usuario.css">
+    <title>Editar Usuário</title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+    </header>
+    <nav>
+        <a href="/adm">Home</a>
+        <a href="/adm/acervo">Acervo</a>
+        <a href="/adm/livros/cadastrar">Cadastro de Livros</a>
+        <a href="/adm/usuarios/cadastrar">Cadastro de Usuários</a>
+        <a href="/adm/emprestimo">Empréstimo</a>
+        <a href="/adm/devolucao">Devolução</a>
+        <a href="/">Sair</a>
+    </nav>
+    <h3>Editar Informações do Usuário</h3>
+    <!--Exibe mensagem na tela (flash)-->
+    <p class="mensagem">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+     </p>
+    <div>
+        <form method="POST" action="/adm/usuarios/editar/{{ usuario.id }}">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" value="{{ usuario.nome }}" required>
+            
+            <label for="matricula">Matrícula:</label>
+            <input type="text" id="matricula" name="matricula" value="{{ usuario.matricula }}" required>
+
+            <label for="endereco">Endereço:</label>
+            <input type="text" id="endereco" name="endereco" value="{{ usuario.endereco }}" required>
+
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" value="{{ usuario.email }}" required>
+
+            <label for="telefone">Telefone:</label>
+            <input type="text" id="telefone" name="telefone" value="{{ usuario.telefone }}" required>
+
+            <a href="/adm" class="cancelar">Cancelar</a>
+
+            <button type="submit">Salvar Alterações</button>
+        </form>
+    </div>
+</body>
+</html>

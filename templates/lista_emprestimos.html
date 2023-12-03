@@ -3,11 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/lista_emprestimo.css">
     <title>Lista de Emprestimos</title>
 </head>
 <body>
-    <!--Permite exibição de mensagem na tela-->
-    <div class="mensagem">
+    <header>
+        <h1></h1>
+    </header>
+    <nav>
+        <a href="/adm">Home</a>
+        <a href="/adm/acervo">Acervo</a>
+        <a href="/adm/livros/cadastrar">Cadastro de Livros</a>
+        <a href="/adm/usuarios/cadastrar">Cadastro de Usuários</a>
+        <a href="/adm/emprestimo">Empréstimo</a>
+        <a href="/adm/devolucao">Devolução</a>
+        <a href="/">Sair</a>
+    </nav>
+    <h3>Relatório de Empréstimos</h3>
+    <p class="mensagem">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
@@ -15,53 +28,54 @@
             {% endfor %}
         {% endif %}
         {% endwith %}
-    </div>
+    </p>
     <div>
-        <h3>Lista de Empréstimos</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>ID do Empréstimo</th>
-                <th>Matrícula</th>
-                <th>Nome</th>
-                <th>Título do Livro</th>
-                <th>Data do Empréstimo</th>
-                <th>Prazo da Devolução</th>
-                <th>Data da Devolução</th>
-                <th>Multa</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for emprestimo in emprestimos %}
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ emprestimo.id }}</td>
-                    <td>{{ emprestimo.usuario.matricula|upper }}</td>
-                    <td>{{ emprestimo.usuario.nome|upper }}</td>
-                    <td>{{ emprestimo.livro.titulo }}</td>
-                    <td>{{ emprestimo.data_emprestimo.strftime('%d-%m-%Y') }}</td>
-                    <td>{{ emprestimo.prazo_devolucao.strftime('%d-%m-%Y') }}</td> 
-                    <td>
-                        {% if emprestimo.data_devolucao %}
-                            {{ emprestimo.data_devolucao.strftime('%d-%m-%Y') }}
-                            
-                        {% else %}
-                            <!-- Espaço em branco -->
-                        {% endif %}
-                    </td>
-                    <td>{{ emprestimo.multa }}</td>
-                    <td>
-                        {% if emprestimo.finalizado %}
-                            Finalizado
-                        {% else %}
-                            Em Andamento
-                        {% endif %}
-                    </td>
+                    <th>ID </th>
+                    <th>Matrícula</th>
+                    <th>Usuário</th>
+                    <th>Título do Livro</th>
+                    <th>Data do Empréstimo</th>
+                    
+                    <th>Data da Devolução</th>
+                    <th>Multa</th>
+                    <th>Status</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="/adm">Voltar para a página inicial</a>
+            </thead>
+            <tbody>
+                {% for emprestimo in emprestimos %}
+                    <tr>
+                        <td>{{ emprestimo.id }}</td>
+                        <td>{{ emprestimo.usuario.matricula|upper }}</td>
+                        <td>{{ emprestimo.usuario.nome }}</td>
+                        <td>{{ emprestimo.livro.titulo }}</td>
+                        <td>{{ emprestimo.data_emprestimo.strftime('%d-%m-%Y') }}</td>
+                        
+                        <td>
+                            {% if emprestimo.data_devolucao %}
+                                {{ emprestimo.data_devolucao.strftime('%d-%m-%Y') }}
+                                
+                            {% else %}
+                                <!-- Espaço em branco -->
+                            {% endif %}
+                        </td>
+                        <td>{{ emprestimo.multa }}</td>
+                        <td>
+                            {% if emprestimo.finalizado %}
+                                Finalizado
+                            {% else %}
+                                Em Andamento
+                            {% endif %}
+                        </td>
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    <h3><a href="/adm">Voltar</a></h3>
+    
 </body>
 </html>

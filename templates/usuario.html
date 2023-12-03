@@ -3,11 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/usuario.css">
     <title>Home</title>
 </head>
 <body>
+    <header>
+        <h1></h1>
+    </header>
+    <nav>
+        <a href="/usuario">Home</a>
+        <a href="/usuario/acervo">Consultar Acervo</a>
+        <a href="/usuario/historico">Histórico de Empréstimos</a>
+        <a href="/">Sair</a>
+    </nav>
+    <h3>Olá, {{ usuario.nome}}!</h3>
      <!--Exibe mensagem na tela (flash)-->
-     <div class="mensagem">
+     <p class="mensagem">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
@@ -15,15 +26,29 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-    </div>
-    <!--Menu do Usuário-->
+     </p>
     <div>
-        <h3>Página do Usuário</h3>
-        <ul>
-            <li><a href="/usuario">Home</a></li>
-            <li><a href="/usuario/acervo">Consultar Acervo</a></li>
-            <li><a href="/usuario/historico">Histórico</a></li>
-        </ul>
+        <img src="/static/usuario.png" alt="usuario">
+        <table>
+            <thead>
+                <tr>
+                    <th>Informações do Usuário</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <p>Nome: {{ usuario.nome }}</p>
+                        <p>Matrícula: {{ usuario.matricula }}</p>
+                        <p>Endereço: {{ usuario.endereco }}</p>
+                        <p>Email: {{ usuario.email }}</p>
+                        <p>Telefone: {{ usuario.telefone }}</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="editar"><a href="/usuario/editar">Editar Informações</a></p>
     </div>
 </body>
 </html>
+

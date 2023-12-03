@@ -3,13 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/cadastrar_usuario.css">
     <title>Cadastro de Usuários</title>
 </head>
 <body>
 
-   
-        <!--Permite exibição de mensagem na tela-->
-    <div class="mensagem">
+    <header>
+        <h1></h1>
+    </header>
+    <nav>
+        <a href="/adm">Home</a>
+        <a href="/adm/acervo">Acervo</a>
+        <a href="/adm/livros/cadastrar">Cadastro de Livros</a>
+        <a href="/adm/usuarios/cadastrar">Cadastro de Usuários</a>
+        <a href="/adm/emprestimo">Empréstimo</a>
+        <a href="/adm/devolucao">Devolução</a>
+        <a href="/">Sair</a>
+    </nav>
+    <h3>Cadastro de Usuários</h3>
+    <!--Permite exibição de mensagem na tela-->
+    <p class="mensagem">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
@@ -17,11 +30,8 @@
             {% endfor %}
         {% endif %}
         {% endwith %}
-    </div>
-    
-
+    </p>
     <div>
-        <h3>Cadastro de Usuários</h3>
         <form method="POST" action="/adm/usuarios/cadastrar"><!--inserir rota(url)-->
             <label for="nome">Nome:</label>
             <input type="text" name="nome" id="nome" required>
@@ -40,10 +50,11 @@
         
             <label for="senha">Senha:</label>
             <input type="password" name="senha" id="senha" required>
-        
+            
+            <a href="/adm" class="cancelar">Cancelar</a>
             <button type="submit">Cadastrar</button>
         </form>
-        <a href="/adm">Voltar para a página inicial</a>
+        
     </div>
 </body>
 </html>

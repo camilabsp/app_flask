@@ -7,53 +7,80 @@
     <title>Empréstimo de Livros</title>
 </head>
 <body>
-    <h1>Empréstimo de Livros</h1>
+    <header>
+        <h1></h1>
+    </header>
+    <nav>
+        <a href="/adm">Home</a>
+        <a href="/adm/acervo">Acervo</a>
+        <a href="/adm/livros/cadastrar">Cadastro de Livros</a>
+        <a href="/adm/usuarios/cadastrar">Cadastro de Usuários</a>
+        <a href="/adm/emprestimo">Empréstimo</a>
+        <a href="/adm/devolucao">Devolução</a>
+        <a href="/">Sair</a>
+    </nav>
+    <h3>Empréstimo de Livros</h3>
+    <p class="mensagem">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </p>
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
+    <!-- Tabela de Livros -->
+    <div>
+
+        <!-- Formulário de busca -->
+        <form method="get" action="/adm/emprestimo">
+            <label for="tipo_busca">Buscar por:</label>
+            <select name="tipo_busca">
+                <option value="titulo" {% if tipo_busca == 'titulo' %}selected{% endif %}>Título</option>
+                <option value="autor" {% if tipo_busca == 'autor' %}selected{% endif %}>Autor</option>
+            </select>
+            <input type="text" name="termo_busca" value="{{ termo_busca }}">
+            <button type="submit">Buscar</button>
+        </form>
+        
+        {% if livros %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Editora</th>
+                        <th>Ano</th>
+                        <th>Opção de Empréstimo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for livro in livros %}
+                        <tr>
+                            <td>{{ livro.titulo }}</td>
+                            <td>{{ livro.autor }}</td>
+                            <td>{{ livro.editora }}</td>
+                            <td>{{ livro.ano }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('emprestimo') }}">
+                                    <input type="hidden" name="livro_id" value="{{ livro.id }}">
+                                    <button type="button" onclick="showUserOptions('{{ livro.id }}')">Realizar Empréstimo</button>
+                                    <div class="user-options" id="userOptions{{ livro.id }}" style="display: none;">
+                                        <label for="matricula">Insira a matrícula do usuário:</label>
+                                        <input type="text" name="matricula" id="matricula" placeholder="Matrícula" required>
+                                        <button type="submit">Confirmar Empréstimo</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Nenhum livro encontrado.</p>
         {% endif %}
-    {% endwith %}
-
-    <!--Tabela de Livros-->
-    <table>
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Autor</th>
-                <th>Editora</th>
-                <th>Ano</th>
-                <th>Opção de Empréstimo</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for livro in livros %}
-                <tr>
-                    <td>{{ livro.titulo }}</td>
-                    <td>{{ livro.autor }}</td>
-                    <td>{{ livro.editora }}</td>
-                    <td>{{ livro.ano }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('emprestimo') }}">
-                            <input type="hidden" name="livro_id" value="{{ livro.id }}">
-                            <button type="button" onclick="showUserOptions('{{ livro.id }}')">Realizar Empréstimo</button>
-                            <div class="user-options" id="userOptions{{ livro.id }}">
-                                <label for="usuario_id">Selecione o Usuário:</label>
-                                <select name="usuario_id" id="usuario_id">
-                                    {% for usuario in usuarios %}
-                                        <option value="{{ usuario.id }}">{{ usuario.matricula|upper }} - {{ usuario.nome|upper }}</option>
-                                    {% endfor %}
-                                </select>
-                                <button type="submit">Confirmar Empréstimo</button>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    </div>
 
     <script>
         function showUserOptions(livroId) {

@@ -3,26 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/lista_usuarios.css">
     <title>Lista de Usuários</title>
 </head>
 <body>
+    <header>
+        <h1></h1>
+    </header>
+    <nav>
+        <a href="/adm">Home</a>
+        <a href="/adm/acervo">Acervo</a>
+        <a href="/adm/livros/cadastrar">Cadastro de Livros</a>
+        <a href="/adm/usuarios/cadastrar">Cadastro de Usuários</a>
+        <a href="/adm/emprestimo">Empréstimo</a>
+        <a href="/adm/devolucao">Devolução</a>
+        <a href="/">Sair</a>
+    </nav>
+    <h3>Informações de Usuários</h3>
+    <!--Exibe mensagem na tela (flash)-->
+    <p class="mensagem">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+     </p>
     <div>
-    <h3>Lista de Usuários</h3>
-    <ul>
-        {% for usuario in usuarios %}
-            <li>
-                <p>Nome: {{ usuario.nome }}</p>
-                <p>Endereço: {{ usuario.endereco }}</p>
-                <p>E-mail: {{ usuario.email }}</p>
-                <p>Telefone: {{ usuario.telefone }}</p>
-                <p>Matrícula: {{ usuario.matricula }}</p>
-                <a href="/edit/{{ usuario.id }}" class="btn btn-primary">Editar</a>
-                <a href="/delete/{{ usuario.id }}" class="btn btn-danger">Excluir</a>
-            </li>
-
-        {% endfor %}
-    </ul>
-    <a href="/adm">Voltar ao Início</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Matrícula</th>
+                    <th>Endereço</th>
+                    <th>e-mail</th>
+                    <th>Telefone</th>
+                    <th>Opções</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{usuario.id}}</td>
+                    <td>{{usuario.nome}}</td>
+                    <td>{{usuario.matricula}}</td>
+                    <td>{{usuario.endereco}}</td>
+                    <td>{{usuario.email}}</td>
+                    <td>{{usuario.telefone}}</td>
+                    <td>
+                        <form method="GET" action="/adm/usuarios/editar/{{usuario.id}}">
+                            <button type="submit" class="btn-editar">Editar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    <h3><a href="/adm">Voltar</a></h3>
 </body>
 </html>

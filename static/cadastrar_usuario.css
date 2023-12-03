@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #361486;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: #2b155e;
+    padding: 10px 0;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 4px;
+}
+
+nav a:hover {
+    background-color: #361486;
+}
+
+.mensagem{
+    color: #2b155e;
+    text-align: center;
+}
+
+h3{
+    text-align: center;
+}
+
+div {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    font-size: 16px;
+    background-color: #2b155e;
+    margin-left: auto;
+    width: 100px;
+    color: #ffffff;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #350a9b;
+}
+
+.cancelar{
+    text-decoration: none;
+    margin-right: auto;
+    width: 100px;
+    background-color:#ffffff;
+    border-color: #2b155e;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 7px 10px;
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/acervo.css">
+    <link rel="stylesheet" href="/static/acervo_usuario.css">
     <title>Acervo</title>
 </head>
 <body>
@@ -11,17 +11,14 @@
         <h1></h1>
     </header>
     <nav>
-        <a href="/adm">Home</a>
-        <a href="/adm/acervo">Acervo</a>
-        <a href="/adm/livros/cadastrar">Cadastro de Livros</a>
-        <a href="/adm/usuarios/cadastrar">Cadastro de Usuários</a>
-        <a href="/adm/emprestimo">Empréstimo</a>
-        <a href="/adm/devolucao">Devolução</a>
+        <a href="/usuario">Home</a>
+        <a href="/usuario/acervo">Consultar Acervo</a>
+        <a href="/usuario/historico">Histórico  de Empréstimos</a>
         <a href="/">Sair</a>
     </nav>
     <h3>Acervo</h3>
     <div>
-        <form method="get" action="/adm/acervo">
+        <form method="get" action="/usuario/acervo">
             <label for="tipo_busca">Buscar por:</label>
             <select name="tipo_busca">
                 <option value="titulo" {% if tipo_busca == 'titulo' %}selected{% endif %}>Título</option>
@@ -41,8 +38,7 @@
                         <th class="isbn">ISBN</th>
                         <th class="editora">Editora</th>
                         <th class="ano">Ano</th>
-                        <th class="exemplar">Exemplares</th>
-                        <th class="opcoes">Opções</th>
+                        <th>Exemplares</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,20 +50,12 @@
                         <td>{{livro.editora}}</td>
                         <td>{{livro.ano}}</td>
                         <td>{{livro.quantidade_exemplares}}</td>
-                        <td>
-                            <!--botão editar-->
-                            <form method="GET" action="/adm/acervo/editar/{{ livro.id }}">
-                                <button type="submit" class="btn-editar">Editar</button>
-                            </form>
-                            
-                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         {% endif %}
     </div>
-    <h3><a href="/adm">Voltar</a></h3>
-    
+    <h3><a href="/usuario">Voltar</a></h3>
 </body>
 </html>

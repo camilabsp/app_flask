@@ -3,34 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/adm.css">
     <title>Administrador</title>
 </head>
 <body>
-
-    <!--Permite exibição de mensagem na tela-->
-    <div class="mensagem">
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
-    </div>
+    <header>
+        <h1></h1>
+    </header>
+    <nav>
+        <a href="/adm">Home</a>
+        <a href="/adm/acervo">Acervo</a>
+        <a href="/adm/livros/cadastrar">Cadastro de Livros</a>
+        <a href="/adm/usuarios/cadastrar">Cadastro de Usuários</a>
+        <a href="/adm/emprestimo">Empréstimo</a>
+        <a href="/adm/devolucao">Devolução</a>
+        <a href="/">Sair</a>
+    </nav>
+    <h3>Página do Administrador</h3>
     
+    <a href="/adm/usuarios"><img src="/static/atualizar.png" alt="atualizar" class="atualizar"></a>
+    <a href="/adm/emprestimos" ><img src="/static/relatorio.png" alt="relatorio" class="relatorio"></a>
+   
     <div>
-        <h3>Página do Administrador</h3>
-        <ul>
-            <li><a href="/adm">Home</a></li>
-            <li><a href="/adm/acervo">Consultar Acervo</a></li>
-            <li><a href="/adm/usuarios">Lista de Usuários</a></li>
-            <li><a href="/adm/livros/cadastrar">Cadastrar Livro</a></li>
-            <li><a href="/adm/usuarios/cadastrar">Cadastrar Usuário</a></li>
-            <li><a href="/adm/emprestimo">Realizar Empréstimo</a></li>
-            <li><a href="/adm/emprestimos">Lista de Empréstimos</a></li>
-            <li><a href="/adm/devolucao">Devolução</a></li>
-            <li><a href="/">Sair</a></li>
-        </ul>
+        <form method="get" action="/adm">
+            <label for="tipo_busca">Buscar por:</label>
+            <select name="tipo_busca">
+                <option value="usuario" {% if tipo_busca == 'usuario' %}selected{% endif %}>Usuário</option>
+                <option value="livro" {% if tipo_busca == 'livro' %}selected{% endif %}>Livro</option>
+            </select>
+            <input type="text" name="termo_busca" value="{{termo_busca}}">
+            <button type="submit">Buscar</button>
+        </form>
+        {% if tipo_busca == 'usuario' %}
+            <h3>Resultados da Busca de Usuários:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Matrícula</th>
+                        <th>Endereço</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in resultados %}
+                        <tr>
+                            <td>{{ usuario.id }}</td>
+                            <td>{{ usuario.nome }}</td>
+                            <td>{{ usuario.matricula }}</td>
+                            <td>{{ usuario.endereco }}</td>
+                            <td>{{ usuario.email }}</td>
+                            <td>{{ usuario.telefone }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% elif tipo_busca == 'livro' %}
+            <h3>Resultados da Busca de Livros:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ISBN</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Ano</th>
+                        <th>Editora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for livro in resultados %}
+                        <tr>
+                            <td>{{ livro.id }}</td>
+                            <td>{{ livro.isbn }}</td>
+                            <td>{{ livro.titulo }}</td>
+                            <td>{{ livro.autor }}</td>
+                            <td>{{ livro.ano }}</td>
+                            <td>{{ livro.editora }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     </div>
 </body>
 </html>

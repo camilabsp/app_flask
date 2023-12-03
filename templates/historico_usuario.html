@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/historico_usuario.css">
+    <title>Empréstimos do Usuário</title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+    </header>
+    <nav>
+        <a href="/usuario">Home</a>
+        <a href="/usuario/acervo">Consultar Acervo</a>
+        <a href="/usuario/historico">Histórico de Empréstimos</a>
+        <a href="/">Sair</a>
+    </nav>
+    <h3>Histórico de Empréstimos</h3>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    {% if emprestimos %}
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Livro</th>
+                        <th>Data Empréstimo</th>
+                        <th>Prazo Devolução</th>
+                        <th>Data Devolução</th>
+                        <th>Multa</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for emprestimo in emprestimos %}
+                        <tr>
+                            <td class="titulo">{{ emprestimo.livro.titulo }}</td>
+                            <td class="emprestimo">{{ emprestimo.data_emprestimo.strftime('%d-%m-%Y') }}</td>
+                            <td class="prazo">{{ emprestimo.prazo_devolucao.strftime('%d-%m-%Y') }}</td>
+                            <td class="devolucao">{{ emprestimo.data_devolucao.strftime('%d-%m-%Y') if emprestimo.data_devolucao else '-' }}</td>
+                            <td class="multa">R$ {{ emprestimo.multa }}</td>
+                            <td>{{ 'Devolvido' if emprestimo.finalizado else 'Em andamento' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    {% else %}
+        <p class="mensagem">Nenhum empréstimo realizado.</p>
+    {% endif %}
+    <h3><a href="/usuario">Voltar</a></h3>
+</body>
+</html>
